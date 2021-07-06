@@ -1,15 +1,35 @@
-easyObjs = open("easy_objectives.txt", "r")
-easyObjsArr = easyObjs.read().strip().split("\n")
-easyObjs.close()
+import json, random
 
-mediumObjs = open("medium_objectives.txt", "r")
-mediumObjsArr = mediumObjs.read().strip().split("\n")
-mediumObjs.close()
+easyObjsFile = open("easy_objectives.txt", "r")
+easyObjsArr = easyObjsFile.read().strip().split("\n")
+easyObjsFile.close()
 
-hardObjs = open("hard_objectives.txt", "r")
-hardObjsArr = hardObjs.read().strip().split("\n")
-hardObjs.close()
+mediumObjsFile = open("medium_objectives.txt", "r")
+mediumObjsArr = mediumObjsFile.read().strip().split("\n")
+mediumObjsFile.close()
 
-print(easyObjsArr)
-print(mediumObjsArr)
-print(hardObjsArr)
+hardObjsFile = open("hard_objectives.txt", "r")
+hardObjsArr = hardObjsFile.read().strip().split("\n")
+hardObjsFile.close()
+
+settingsJson = open("settings.json", "r")
+parsedSettings = json.loads(settingsJson.read())
+settingsJson.close()
+
+easyObjs = random.sample(easyObjsArr, parsedSettings['numEasyObjectives'])
+mediumObjs = random.sample(mediumObjsArr, parsedSettings['numMediumObjectives'])
+hardObjs = random.sample(hardObjsArr, parsedSettings['numHardObjectives'])
+
+objsArr = []
+
+for obj in easyObjs:
+    objsArr.append({"name": obj})
+
+for obj in mediumObjs:
+    objsArr.append({"name": obj})
+
+for obj in hardObjs:
+    objsArr.append({"name": obj})
+
+with open('output.json', 'w') as json_file:
+    json.dump(objsArr, json_file)
